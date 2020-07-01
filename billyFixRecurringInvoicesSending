@@ -45,7 +45,7 @@ class BillyClient {
 /*
 * Use with cronjob to fix recurring invoices not sending. Checks every 24 hours.
 * Finds invoices that is not paid, have sentState unsent and is approved
-* Copyright: Kim Vinberg <support@websitecare.io>
+* Author: Kim Vinberg <support@websitecare.io>
 */
 
 // Gets the id of the organization associated with the API token.
