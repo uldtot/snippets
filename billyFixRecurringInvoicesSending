@@ -1,0 +1,126 @@
+<?php
+// Reusable client for sending requests to the Billy API
+class BillyClient {
+    private $apiToken;
+
+    public function __construct($apiToken) {
+        $this->apiToken = $apiToken;
+    }
+
+    public function request($method, $url, $body = null) {
+        try {
+            $c = curl_init("https://api.billysbilling.com/v2" . $url);
+            curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($c, CURLOPT_CUSTOMREQUEST, $method);
+
+            // Set headers
+            curl_setopt($c, CURLOPT_HTTPHEADER, array(
+                "X-Access-Token: " . $this->apiToken,
+                "Content-Type: application/json"
+            ));
+
+            if ($body) {
+                // Set body
+                curl_setopt($c, CURLOPT_POSTFIELDS, json_encode($body));
+            }
+
+            // Execute request
+            $res = curl_exec($c);
+            $status = curl_getinfo($c, CURLINFO_HTTP_CODE);
+            $body = json_decode($res);
+
+            if ($status >= 400) {
+                throw new Exception("$method: $url failed with $status - $res");
+            }
+
+            return $body;
+        } catch (Exception $e) {
+            print_r($e);
+            throw $e;
+        }
+    }
+}
+
+
+/*
+* Use with cronjob to fix recurring invoices not sending. Checks every 24 hours.
+* Finds invoices that is not paid, have sentState unsent and is approved
+* Copyright: Kim Vinberg <support@websitecare.io>
+*/
+
+// Gets the id of the organization associated with the API token.
+function getOrganizationId($client) {
+    $res = $client->request("GET", "/organization");
+
+    return $res->organization->id;
+}
+
+// Get all unsent invoices where state is approved and isPaid is not 1.
+function getUnsentInvoices($client) {
+
+      $res = $client->request("GET", "/invoices");
+      $pageCount = $res->meta->paging->pageCount;
+
+      $unsentInvoices = array();
+
+      for ($i = 1; $i <= $pageCount; $i++) {
+            $res = $client->request("GET", "/invoices?page=$i");
+            foreach($res->invoices AS $id => $data) {
+
+                  if( $data->state == "approved" && $data->sentState == "unsent" && $data->isPaid != "1" ) {
+
+                        $unsentInvoices[] = $data;
+
+                  }
+
+            }
+      }
+
+      return $unsentInvoices;
+
+ }
+
+// Send the invoice to the client
+function sendIvoice($client, $invoiceId, $contactPersonId, $invoiceNo, $grossAmount, $dueDate) {
+
+      $emailBody = array("email" => array(
+            "contactPersonId" => "$contactPersonId",
+            "copyToUserId" => null,
+            "emailSubject" => "Faktura nr. ",
+            "emailBody" => "Hermed fremsendes faktura nr. ".$invoiceNo.". Beløbet ".$grossAmount." bedes indbetalt senest ".$dueDate.".",
+                  )
+            );
+
+    //$res = $client->request("POST", "/invoices/$invoiceId/emails", $emailBody);
+    echo "Did a post on /invoices/$invoiceId/emails ".json_encode($emailBody)."<br>";
+   // return $res;
+}
+
+// Prepare the inovices to be sent if they are older than 24 hours and not sent.
+function prepareSend($client, $unsentInvoices) {
+
+      foreach ($unsentInvoices as $id => $data) {
+
+            $createdTime = strtotime($data->createdTime);
+
+            if($createdTime  <= strtotime('-24 hours')) {
+
+                  $invoiceId = $data->id;
+                  $contactPersonId = $data->attContactPersonId;
+                  $invoiceNo = $data->$invoiceNo;
+                  $grossAmount = $data->$grossAmount;
+                  $dueDate = $data->$dueDate;
+                  sendIvoice($client, $invoiceId, $contactPersonId, $invoiceNo, $grossAmount, $dueDate);
+
+            }
+
+      }
+
+}
+
+$apiKey = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"; // Your api KEY
+$client = new BillyClient($apiKey);
+$currentOrganizationId = getOrganizationId($client);
+
+$unsentInvoices = getUnsentInvoices($client);
+prepareSend($unsentInvoices, $unsentInvoices);
