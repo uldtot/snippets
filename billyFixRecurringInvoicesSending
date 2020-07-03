@@ -1,46 +1,7 @@
 <?php
-// Reusable client for sending requests to the Billy API
-class BillyClient {
-    private $apiToken;
 
-    public function __construct($apiToken) {
-        $this->apiToken = $apiToken;
-    }
-
-    public function request($method, $url, $body = null) {
-        try {
-            $c = curl_init("https://api.billysbilling.com/v2" . $url);
-            curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($c, CURLOPT_CUSTOMREQUEST, $method);
-
-            // Set headers
-            curl_setopt($c, CURLOPT_HTTPHEADER, array(
-                "X-Access-Token: " . $this->apiToken,
-                "Content-Type: application/json"
-            ));
-
-            if ($body) {
-                // Set body
-                curl_setopt($c, CURLOPT_POSTFIELDS, json_encode($body));
-            }
-
-            // Execute request
-            $res = curl_exec($c);
-            $status = curl_getinfo($c, CURLINFO_HTTP_CODE);
-            $body = json_decode($res);
-
-            if ($status >= 400) {
-                throw new Exception("$method: $url failed with $status - $res");
-            }
-
-            return $body;
-        } catch (Exception $e) {
-            print_r($e);
-            throw $e;
-        }
-    }
-}
-
+#ADD THE BILLY SAMPLE CODE HERE.
+# FIND THE SAMPLE CODE HERE: https://www.billy.dk/api/
 
 /*
 * Use with cronjob to fix recurring invoices not sending. Checks every 24 hours.
