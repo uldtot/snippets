@@ -1,0 +1,75 @@
+
+		<div style="position: fixed;
+	    left: 10px;
+	    top: 100px;
+	    width: 160px;
+	    background: #eaeaea;
+	     z-index:1;" class="floatingads left">
+			<!-- Sidebar - Venstre - header_php -->
+	<ins class="adsbygoogle"
+	     style="display:block"
+	     data-ad-client="ca-pub-1111111111111192261"
+	     data-ad-slot="1111111111"
+	     data-ad-format="auto"
+	     data-full-width-responsive="true"></ins>
+	<script>
+	     (adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+		</div>
+		<div style="position: fixed;
+	    right: 10px;
+	    top: 100px;
+	    width: 160px;
+	    background: #eaeaea;
+	    z-index:1;"class="floatingads right">
+			<!-- Sidebar - Højre - header_php -->
+			<ins class="adsbygoogle"
+			     style="display:block"
+			     data-ad-client="ca-pub-1111111111111192261"
+			     data-ad-slot="1111111111"
+			     data-ad-format="auto"
+			     data-full-width-responsive="true"></ins>
+			<script>
+			     (adsbygoogle = window.adsbygoogle || []).push({});
+			</script>
+		</div>
+
+
+<script>
+jQuery( document ).ready(function($) {
+	$(window).resize(function() {
+
+	 resizeAds()
+
+	});
+
+resizeAds();
+
+	function resizeAds() {
+
+		if ($(this).width() < "1500") {
+
+	        $('.floatingads').hide();
+
+	      } else {
+
+	        $('.floatingads').show();
+	        // Calculate div positions
+	        var windowWidth = $(this).width();
+	        var leftSpace = ((windowWidth-1140)/2);
+	        var rightSpace = ((windowWidth-1140)/2);
+	          $(".floatingads.left").css("left", leftSpace-160);
+	          $(".floatingads.right").css("right", rightSpace-160);
+
+	        }
+
+	}
+});
+</script>
+		<style>
+		@media only screen and (max-width: 1500px) {
+	  .floatingads {
+	    display:none;
+	  }
+	}
+		</style>
