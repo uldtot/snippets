@@ -1,4 +1,8 @@
-#Place this on the landing page
+# On all your forms where you want to track leads. Make a field with the ID pasessid and set the field to hidden. This is needed to track the individual lead if needed.
+
+	<input type="hidden" name="pahiddenformfield" id="pasessid" value="">
+
+# Place this on the landing page
 
 	<script type="text/javascript">
 	var programid = XXXX;
