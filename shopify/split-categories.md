@@ -8,4 +8,4 @@ THen add the following code to the liquid files where you want the scription to 
 {% assign long_desc = descriptions[1] %}
 
 In the collection / category descirption, switch to HTML mode and insert <!-- split --> where you want the category to split.
-Example: mian-collection-product-grid.liquid
+Example: main-collection-product-grid.liquid
