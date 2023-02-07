@@ -1,75 +1,99 @@
+<div class="floatingads left" style="width:300px;height:600px;">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1181981315600718"
+     crossorigin="anonymous"></script>
+<!-- Responsiv Lodret -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-1181981315600718"
+     data-ad-slot="2179840543"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
 
-		<div style="position: fixed;
-	    left: 10px;
-	    top: 100px;
-	    width: 160px;
-	    background: #eaeaea;
-	     z-index:1;" class="floatingads left">
-			<!-- Sidebar - Venstre - header_php -->
-	<ins class="adsbygoogle"
-	     style="display:block"
-	     data-ad-client="ca-pub-1111111111111192261"
-	     data-ad-slot="1111111111"
-	     data-ad-format="auto"
-	     data-full-width-responsive="true"></ins>
-	<script>
-	     (adsbygoogle = window.adsbygoogle || []).push({});
-	</script>
-		</div>
-		<div style="position: fixed;
-	    right: 10px;
-	    top: 100px;
-	    width: 160px;
-	    background: #eaeaea;
-	    z-index:1;"class="floatingads right">
-			<!-- Sidebar - Højre - header_php -->
-			<ins class="adsbygoogle"
-			     style="display:block"
-			     data-ad-client="ca-pub-1111111111111192261"
-			     data-ad-slot="1111111111"
-			     data-ad-format="auto"
-			     data-full-width-responsive="true"></ins>
-			<script>
-			     (adsbygoogle = window.adsbygoogle || []).push({});
-			</script>
-		</div>
+<div class="floatingads right" style="width:300px;height:600px;">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1181981315600718"
+     crossorigin="anonymous"></script>
+<!-- Responsiv Lodret -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-1181981315600718"
+     data-ad-slot="2179840543"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
 
 
 <script>
-jQuery( document ).ready(function($) {
-	$(window).resize(function() {
+jQuery(document).ready(function($) {
+  $(window).resize(resizeAds);
+  resizeAds();
 
-	 resizeAds()
+  function resizeAds() {
+	  
+	  // Get the widths
+	  var browserWidth = $(this).width();
+	  var browserHeight = $(this).height();
+	  var siteContentWidth = $('.site-content').width();
+	  var availableSpace = browserWidth-siteContentWidth-20; // Available space minus 10px around sides
+	  var offsetHeight = $('.site-header').height()+40;
+	  
+	   $('.floatingads').css('top', offsetHeight);
+	  
+	  // If creensize is lower than 1600px, then hide the sticky ads.
+    if (browserWidth < 1600) {
+      $('.floatingads').hide();
+    } else {
+      $('.floatingads').show();
+     
+		var leftSpace = (browserWidth - siteContentWidth) / 2;
+      var rightSpace = (browserWidth - siteContentWidth) / 2;
+	 var maxAdWidth = 300;
+		
+		if(leftSpace > maxAdWidth) {
+      $('.floatingads.left').css('width', maxAdWidth);
+      $('.floatingads.left').css('left', (leftSpace-maxAdWidth)/2);
+		} else {
+      $('.floatingads.left').css('width', leftSpace);
+      $('.floatingads.left').css('left', 0);
+		}
+		
+	 $('.floatingads.left').css('height', browserHeight);
 
-	});
-
-resizeAds();
-
-	function resizeAds() {
-
-		if ($(this).width() < "1500") {
-
-	        $('.floatingads').hide();
-
-	      } else {
-
-	        $('.floatingads').show();
-	        // Calculate div positions
-	        var windowWidth = $(this).width();
-	        var leftSpace = ((windowWidth-1140)/2);
-	        var rightSpace = ((windowWidth-1140)/2);
-	          $(".floatingads.left").css("left", leftSpace-160);
-	          $(".floatingads.right").css("right", rightSpace-160);
-
-	        }
-
-	}
+		
+	if(rightSpace > maxAdWidth) {
+      $('.floatingads.right').css('width', maxAdWidth);		
+      $('.floatingads.right').css('right', (rightSpace-maxAdWidth)/2);
+		} else {
+      $('.floatingads.right').css('width', (rightSpace-maxAdWidth)/2);
+      $('.floatingads.right').css('right', 0);
+		}
+		
+		$('.floatingads.right').css('height', browserHeight);
+		
+    }
+  }
 });
+
 </script>
 		<style>
-		@media only screen and (max-width: 1500px) {
-	  .floatingads {
-	    display:none;
-	  }
-	}
+		.floatingads {
+  position: fixed;
+  z-index: 1;
+  top:0;
+}
+
+
+
+@media only screen and (max-width: 1500px) {
+  .floatingads {
+    display: none;
+  }
+}
+
 		</style>
