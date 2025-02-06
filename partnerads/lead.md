@@ -96,3 +96,23 @@
 
 		//pasessid
 	</script>
+
+//Alternative version
+<script type="text/javascript">
+        var programid = XXXXXXXX;
+        var paid = getCookie("paid");
+        var pacid = getCookie("pacid");
+        var pasessid = getCookie("pasessid");
+
+        console.log("paid cookie for partnerads:" + paid);
+
+        for (var i = 0; i < orderItems.length; i++) {
+            var item = orderItems[i];
+            var trackingPixelUrl = 'https://www.partner-ads.com/dk/leadtracks2s.php?programid=' + programid +
+                '&type=salg&uiv=' + pasessid + '&partnerid=' + paid + '&pacid=' + pacid +
+                '&ordreid=' + item.ORDRENUMMER + '&varenummer=' + item.VARENUMMER +
+                '&altsats=' + item.SATSGRUPPE + '&antal=' + item.ANTAL + '&omprsalg=' + item.SALGSPRIS;
+
+            document.body.innerHTML += '<img decoding="async" src="' + trackingPixelUrl + '" width="0" height="0">';
+        }
+    </script>
